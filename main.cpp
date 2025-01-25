@@ -27,6 +27,7 @@ bool isNumber(char c) {
     case '7':
     case '8':
     case '9':
+    case '0':
     case '.':
       return true;
     default:
