@@ -4,29 +4,48 @@
 
 using namespace std;
 
-int add(int a, int b) {
+double add(double a, double b) {
   return a+b;
 }
 
-int sub(int a, int b) {
+double sub(double a, double b) {
   return a-b;
 }
 
-int mult(int a, int b) {
+double mult(double a, double b) {
   return a*b;
 }
 
-int parse(string);
-int calculate(string);
+bool isNumber(char c) {
+  switch (c) {
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+    case '.':
+      return true;
+    default:
+      return false;
+
+  }
+ }
+
+double parse(string);
+double calculate(string);
 
 typedef struct {
   string expression;
 } Parser;
 
 typedef struct {
-  int operand1;
-  int operand2;
-  int (*operato) (int,int);
+  double operand1;
+  double operand2;
+  double (*operato) (double,double);
 } Operation;
 
 typedef struct {
@@ -82,7 +101,7 @@ UnwrapedExpression unwrap(string expression) {
   }
 }
 
-int calculate(string expression) {
+double calculate(string expression) {
   cout << "Calculate expression: " << expression << endl;
   vector<string> operands;
   vector<string> operations;
@@ -112,7 +131,7 @@ int calculate(string expression) {
             offset = index + 1;
             onlyDigits = false;
         }
-    } else if (isdigit(character) || isPlusMinusOperator(character)) {
+    } else if (isNumber(character) || isPlusMinusOperator(character)) {
         temp_operand += character;
     }
     if(index == expression.size() - 1 && operands.size() == operations.size()) {
@@ -120,11 +139,11 @@ int calculate(string expression) {
     }
   }
   if (onlyDigits) {
-      cout << "STOI operand: " << temp_operand << endl;
-    return stoi(temp_operand);
+      cout << "STOD operand: " << temp_operand << endl;
+    return stod(temp_operand);
   } else {
     cout << "Operands: " << operands.size() << " Operations: " << operations.size() << endl;
-    int accumulator = parse(operands.back());
+    double accumulator = parse(operands.back());
     operands.pop_back();
     string operation;
     string operand;
@@ -144,7 +163,7 @@ int calculate(string expression) {
   }
 }
 
-int parse(string expression) {
+double parse(string expression) {
   cout << "Parse expression: " << expression << "\n";
   vector<string> operands;
   vector<string> operations;
@@ -175,7 +194,7 @@ int parse(string expression) {
     }
   }
 
-  int accumulator = calculate(operands.back());
+  double accumulator = calculate(operands.back());
   operands.pop_back();
 
   string operation;
@@ -215,7 +234,7 @@ string trimWhitespace(string expression) {
 bool verifySymbols(string expression) {
   for (unsigned int i = 0; i < expression.size(); i++) {
     char character = expression.at(i);
-    if(!(isdigit(character) || isOperator(character) || character == '(' || character == ')')) {
+    if(!(isNumber(character) || isOperator(character) || character == '(' || character == ')')) {
       return 0;
     }
   }
@@ -225,7 +244,7 @@ string expandExpression(string expression) {
   for (unsigned int i = 0; i < expression.size(); i++) {
     char character = expression.at(i);
     //cout << "Expanding: " << character << endl;
-    if (character == '(' && (isdigit(expression.at(i-1)) || expression.at(i-1) == ')')) {
+    if (character == '(' && (isNumber(expression.at(i-1)) || expression.at(i-1) == ')')) {
       expression.insert(i, "*");
       i++;
     }
@@ -234,7 +253,7 @@ string expandExpression(string expression) {
   return expression;
 }
 
-int evaluate(string expression) {
+double evaluate(string expression) {
   string trimmedExpression = trimWhitespace(expression);
   if (verifySymbols(trimmedExpression)) {
     string expandedExpression = expandExpression(trimmedExpression);
@@ -256,7 +275,7 @@ int main() {
       done = 1;
     } else {
       //      cout << "You entered:\n";
-      int result = evaluate(input);
+      double result = evaluate(input);
       cout << "Result: " << result << "\n";
     }
   }
