@@ -1,5 +1,5 @@
 #include <iostream>
-#include <vector>
+#include <queue>
 #include <locale>
 
 using namespace std;
@@ -14,6 +14,10 @@ double sub(double a, double b) {
 
 double mult(double a, double b) {
   return a*b;
+}
+
+double div(double a, double b) {
+  return a/b;
 }
 
 bool isNumber(char c) {
@@ -54,7 +58,7 @@ typedef struct {
   size_t offset;
 } UnwrapedExpression;
 
-int isOperator(char character) {
+bool isOperator(char character) {
   switch(character) {
     case '+':
     case '-':
@@ -66,7 +70,7 @@ int isOperator(char character) {
   }
 }
 
-int isPlusMinusOperator(char character) {
+bool isPlusMinusOperator(char character) {
   switch(character) {
     case '+':
     case '-':
@@ -104,8 +108,8 @@ UnwrapedExpression unwrap(string expression) {
 
 double calculate(string expression) {
   cout << "Calculate expression: " << expression << endl;
-  vector<string> operands;
-  vector<string> operations;
+  queue<string> operands;
+  queue<string> operations;
 
   bool onlyDigits = true;
   string temp_operand = "";
@@ -115,28 +119,40 @@ double calculate(string expression) {
     //cout << "Character: " << character << endl;
     if (character == '(') {
       UnwrapedExpression unwraped = unwrap(expression.substr(index));
-      operands.push_back(unwraped.operand);
+      operands.push(unwraped.operand);
       offset += unwraped.offset;
       index += unwraped.offset - 1;
       temp_operand = "";
       onlyDigits = false;
     } else if (character == '*') {
         if (temp_operand != "") {
-            operands.push_back(temp_operand);
-            operations.push_back("mult");
+            operands.push(temp_operand);
+            operations.push("mult");
             offset = index + 1;
             temp_operand = "";
             onlyDigits = false;
         } else {
-            operations.push_back("mult");
+            operations.push("mult");
             offset = index + 1;
             onlyDigits = false;
         }
+    } else if (character == '/') {
+      if (temp_operand != "") {
+        operands.push(temp_operand);
+        operations.push("div");
+        offset = index + 1;
+        temp_operand = "";
+        onlyDigits = false;
+      } else {
+        operations.push("div");
+        offset = index + 1;
+        onlyDigits = false;
+      }
     } else if (isNumber(character) || isPlusMinusOperator(character)) {
         temp_operand += character;
     }
     if(index == expression.size() - 1 && operands.size() == operations.size()) {
-        operands.push_back(temp_operand);
+        operands.push(temp_operand);
     }
   }
   if (onlyDigits) {
@@ -144,20 +160,22 @@ double calculate(string expression) {
     return stod(temp_operand);
   } else {
     cout << "Operands: " << operands.size() << " Operations: " << operations.size() << endl;
-    double accumulator = parse(operands.back());
-    operands.pop_back();
+    double accumulator = parse(operands.front());
+    operands.pop();
     string operation;
     string operand;
     while(operands.size() > 0) {
-        operation = operations.back();
-        operations.pop_back();
+        operation = operations.front();
+        operations.pop();
 
-        operand = operands.back();
-        operands.pop_back();
+        operand = operands.front();
+        operands.pop();
 
         cout << accumulator << " " << operation << " " << operand << "\n";
         if (operation == "mult") {
           accumulator = mult(accumulator, parse(operand));
+        } else if (operation == "div") {
+          accumulator = div(accumulator, parse(operand));
         }
     }
     return accumulator;
@@ -166,8 +184,8 @@ double calculate(string expression) {
 
 double parse(string expression) {
   cout << "Parse expression: " << expression << "\n";
-  vector<string> operands;
-  vector<string> operations;
+  queue<string> operands;
+  queue<string> operations;
   int depth = 0;
 
   int offset = 0;
@@ -175,14 +193,14 @@ double parse(string expression) {
     char character = expression.at(index);
     if (character == '+') {
       if (depth == 0) {
-        operands.push_back(expression.substr(offset,index-offset));
-        operations.push_back("add");
+        operands.push(expression.substr(offset,index-offset));
+        operations.push("add");
         offset = index + 1;
       }
     } else if (character == '-') {
       if (depth == 0) {
-        operands.push_back(expression.substr(offset,index-offset));
-        operations.push_back("sub");
+        operands.push(expression.substr(offset,index-offset));
+        operations.push("sub");
         offset = index + 1;
       }
     } else if (character == '(') {
@@ -191,21 +209,21 @@ double parse(string expression) {
       depth--;
     }
     if(index == expression.size() - 1) {
-      operands.push_back(expression.substr(offset,index-offset+1));
+      operands.push(expression.substr(offset,index-offset+1));
     }
   }
 
-  double accumulator = calculate(operands.back());
-  operands.pop_back();
+  double accumulator = calculate(operands.front());
+  operands.pop();
 
   string operation;
   string operand;
   while(operands.size() > 0) {
-    operation = operations.back();
-    operations.pop_back();
+    operation = operations.front();
+    operations.pop();
 
-    operand = operands.back();
-    operands.pop_back();
+    operand = operands.front();
+    operands.pop();
 
     cout << accumulator << " " << operation << " " << operand << "\n";
     if (operation == "add") {
@@ -245,7 +263,7 @@ string expandExpression(string expression) {
   for (unsigned int i = 0; i < expression.size(); i++) {
     char character = expression.at(i);
     //cout << "Expanding: " << character << endl;
-    if (character == '(' && (isNumber(expression.at(i-1)) || expression.at(i-1) == ')')) {
+    if (character == '(' && i > 0 && (isNumber(expression.at(i-1)) || expression.at(i-1) == ')')) {
       expression.insert(i, "*");
       i++;
     }
