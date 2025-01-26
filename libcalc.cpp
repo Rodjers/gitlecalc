@@ -96,7 +96,7 @@ UnwrapedExpression unwrap(std::string expression) {
 }
 
 double calculate(std::string expression) {
-    std::cout << "Calculate expression: " << expression << std::endl;
+    //std::cout << "Calculate expression: " << expression << std::endl;
     std::queue<std::string> operands;
     std::queue<std::string> operations;
 
@@ -145,10 +145,10 @@ double calculate(std::string expression) {
         }
     }
     if (onlyDigits) {
-        std::cout << "STOD operand: " << temp_operand << std::endl;
+        //std::cout << "STOD operand: " << temp_operand << std::endl;
         return stod(temp_operand);
     } else {
-        std::cout << "Operands: " << operands.size() << " Operations: " << operations.size() << std::endl;
+        //std::cout << "Operands: " << operands.size() << " Operations: " << operations.size() << std::endl;
         double accumulator = libcalc::parse(operands.front());
         operands.pop();
         std::string operation;
@@ -160,7 +160,7 @@ double calculate(std::string expression) {
             operand = operands.front();
             operands.pop();
 
-            std::cout << accumulator << " " << operation << " " << operand << "\n";
+            //std::cout << accumulator << " " << operation << " " << operand << "\n";
             if (operation == "mult") {
                 accumulator = mult(accumulator, libcalc::parse(operand));
             } else if (operation == "div") {
@@ -171,7 +171,7 @@ double calculate(std::string expression) {
     }
 }
 double parse(std::string expression) {
-    std::cout << "Parse expression: " << expression << "\n";
+    //std::cout << "Parse expression: " << expression << "\n";
     std::queue<std::string> operands;
     std::queue<std::string> operations;
     int depth = 0;
@@ -213,7 +213,7 @@ double parse(std::string expression) {
         operand = operands.front();
         operands.pop();
 
-        std::cout << accumulator << " " << operation << " " << operand << "\n";
+        //std::cout << accumulator << " " << operation << " " << operand << "\n";
         if (operation == "add") {
             accumulator = add(accumulator, calculate(operand));
         } else if (operation == "sub") {
@@ -226,15 +226,15 @@ double parse(std::string expression) {
 
 std::string trimWhitespace(std::string expression) {
     std::string trimmedExpression = "";
-    std::cout << "Size of expression: " << expression.size() << "\n";
+    //std::cout << "Size of expression: " << expression.size() << "\n";
     for (unsigned int i = 0; i < expression.size(); i++) {
         char character = expression.at(i);
-        std::cout << "Character: " << character << std::endl;
+        //std::cout << "Character: " << character << std::endl;
         if (!isspace(character)) {
             trimmedExpression += character;
         }
     }
-    std::cout << "Trimmed expression: " << trimmedExpression << std::endl;
+    //std::cout << "Trimmed expression: " << trimmedExpression << std::endl;
     return trimmedExpression;
 }
 
@@ -256,7 +256,7 @@ std::string expandExpression(std::string expression) {
             i++;
         }
     }
-    std::cout << "Expanded expression: " << expression << std::endl;
+    //std::cout << "Expanded expression: " << expression << std::endl;
     return expression;
 }
 
@@ -266,8 +266,7 @@ std::string evaluate(std::string expression) {
         std::string expandedExpression = expandExpression(trimmedExpression);
         return std::to_string(libcalc::parse(expandedExpression));
     } else {
-        std::cerr << "Invalid expression: " << expression << std::endl;
-        exit(1);
+        return "Invalid expression";
     }
 }
 

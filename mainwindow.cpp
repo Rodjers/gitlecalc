@@ -131,3 +131,9 @@ void MainWindow::on_buttonEquals_clicked()
     ui->calcInput->setText(QString::fromStdString(libcalc::evaluate(ui->calcInput->text().toStdString())));
 }
 
+
+void MainWindow::on_calcInput_returnPressed()
+{
+    ui->calcInput->setText(QString::fromStdString(libcalc::evaluate(ui->calcInput->text().toStdString())));
+}
+
