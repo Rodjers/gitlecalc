@@ -58,6 +58,8 @@ private slots:
 
     void on_Backspace_clicked();
 
+    void on_calcInput_returnPressed();
+
 private:
     Ui::MainWindow *ui;
 };

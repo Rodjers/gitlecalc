@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->calcInput->setFocus();
 }
 
 MainWindow::~MainWindow()
@@ -117,6 +118,7 @@ void MainWindow::on_buttonRightParenthesis_clicked()
 void MainWindow::on_buttonAllClear_clicked()
 {
     ui->calcInput->clear();
+    ui->calcInput->setFocus();
 }
 
 
@@ -127,6 +129,12 @@ void MainWindow::on_Backspace_clicked()
 
 
 void MainWindow::on_buttonEquals_clicked()
+{
+    ui->calcInput->setText(QString::fromStdString(libcalc::evaluate(ui->calcInput->text().toStdString())));
+}
+
+
+void MainWindow::on_calcInput_returnPressed()
 {
     ui->calcInput->setText(QString::fromStdString(libcalc::evaluate(ui->calcInput->text().toStdString())));
 }

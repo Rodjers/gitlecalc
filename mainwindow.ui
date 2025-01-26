@@ -15,9 +15,15 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
-    <string notr="true">QPushButton {
+    <string notr="true">QWidget {
+background-color: #181926;
+color: #cad3f5;
+}
+
+QPushButton {
 background-color: #494d64;
 border-radius: 0px;
+font-size: 36px;
 height: 100px;
 width: 100px;
 }
