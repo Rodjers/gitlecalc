@@ -260,11 +260,17 @@ std::string expandExpression(std::string expression) {
     return expression;
 }
 
+std::string formatOutput(std::string str) {
+    str.erase(str.find_last_not_of('0') + 1, std::string::npos);
+    str.erase(str.find_last_not_of('.') + 1, std::string::npos);
+    return str;
+}
+
 std::string evaluate(std::string expression) {
     std::string trimmedExpression = trimWhitespace(expression);
     if (verifySymbols(trimmedExpression)) {
         std::string expandedExpression = expandExpression(trimmedExpression);
-        return std::to_string(libcalc::parse(expandedExpression));
+        return formatOutput(std::to_string(libcalc::parse(expandedExpression)));
     } else {
         return "Invalid expression";
     }
