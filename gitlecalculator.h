@@ -1,21 +1,21 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef GITLECALCULATOR_H
+#define GITLECALCULATOR_H
 
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
-class MainWindow;
+class GitleCalculator;
 }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class GitleCalculator : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    GitleCalculator(QWidget *parent = nullptr);
+    ~GitleCalculator();
 
 private slots:
     void on_buttonZero_clicked();
@@ -61,6 +61,6 @@ private slots:
     void on_calcInput_returnPressed();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::GitleCalculator *ui;
 };
-#endif // MAINWINDOW_H
+#endif // GITLECALCULATOR_H
