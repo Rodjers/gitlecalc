@@ -8,6 +8,7 @@ GitleCalculator::GitleCalculator(QWidget *parent)
 {
     ui->setupUi(this);
     this->setWindowTitle(QString::fromStdString("Gitle Calculator"));
+    ui->calcInput->setAlignment(Qt::AlignRight);
     ui->calcInput->setFocus();
 }
 
