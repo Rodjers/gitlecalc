@@ -19,7 +19,6 @@ set(PROJECT_SOURCES
         mainwindow.ui
         libcalc.cpp
         libcalc.h
-
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -72,3 +71,25 @@ install(TARGETS gitle-calculator
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(gitle-calculator)
 endif()
+
+include(FetchContent)
+FetchContent_Declare(
+        googletest
+        URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+FetchContent_MakeAvailable(googletest)
+
+enable_testing()
+
+add_executable(
+        main_test
+        main_test.cpp
+        libcalc.cpp
+)
+target_link_libraries(
+        main_test
+        GTest::gtest_main
+)
+
+include(GoogleTest)
+gtest_discover_tests(main_test)
