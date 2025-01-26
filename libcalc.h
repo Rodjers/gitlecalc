@@ -1,10 +1,11 @@
 //
 // Created by oddgeir on 1/25/25.
 //
-#include <iostream>
 
 #ifndef LIBCALC_H
 #define LIBCALC_H
+
+#include <string>
 
 namespace libcalc {
   bool isNumber(char);
@@ -14,6 +15,8 @@ namespace libcalc {
   double parse(std::string);
 
   double calculate(std::string);
+
+  std::string evaluate(std::string);
 }
 
 #endif //LIBCALC_H
