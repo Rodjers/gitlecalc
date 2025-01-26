@@ -8,14 +8,6 @@
 #include <string>
 
 namespace libcalc {
-  bool isNumber(char);
-
-  bool isOperator(char character);
-
-  double parse(std::string);
-
-  double calculate(std::string);
-
   std::string evaluate(std::string);
 }
 

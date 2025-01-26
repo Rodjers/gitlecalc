@@ -6,6 +6,8 @@
 #include "libcalc.h"
 
 namespace libcalc {
+double calculatePlusAndMinus(std::string);
+double unwrapParentesisAndAclculateMultiplicationAndDivision(std::string);
 double add(double a, double b) {
     return a+b;
 }
@@ -95,8 +97,8 @@ UnwrapedExpression unwrap(std::string expression) {
     }
 }
 
-double calculate(std::string expression) {
-    //std::cout << "Calculate expression: " << expression << std::endl;
+double unwrapParentesisAndAclculateMultiplicationAndDivision(std::string expression) {
+    //std::cout << "unwrapParentesisAndAclculateMultiplicationAndDivision expression: " << expression << std::endl;
     std::queue<std::string> operands;
     std::queue<std::string> operations;
 
@@ -149,7 +151,7 @@ double calculate(std::string expression) {
         return stod(temp_operand);
     } else {
         //std::cout << "Operands: " << operands.size() << " Operations: " << operations.size() << std::endl;
-        double accumulator = libcalc::parse(operands.front());
+        double accumulator = libcalc::calculatePlusAndMinus(operands.front());
         operands.pop();
         std::string operation;
         std::string operand;
@@ -162,16 +164,16 @@ double calculate(std::string expression) {
 
             //std::cout << accumulator << " " << operation << " " << operand << "\n";
             if (operation == "mult") {
-                accumulator = mult(accumulator, libcalc::parse(operand));
+                accumulator = mult(accumulator, libcalc::calculatePlusAndMinus(operand));
             } else if (operation == "div") {
-                accumulator = div(accumulator, libcalc::parse(operand));
+                accumulator = div(accumulator, libcalc::calculatePlusAndMinus(operand));
             }
         }
         return accumulator;
     }
 }
-double parse(std::string expression) {
-    //std::cout << "Parse expression: " << expression << "\n";
+double calculatePlusAndMinus(std::string expression) {
+    //std::cout << "unwrapParentesisAndAclculateMultiplicationAndDivisionPlusAndMinus expression: " << expression << "\n";
     std::queue<std::string> operands;
     std::queue<std::string> operations;
     int depth = 0;
@@ -201,7 +203,7 @@ double parse(std::string expression) {
         }
     }
 
-    double accumulator = calculate(operands.front());
+    double accumulator = unwrapParentesisAndAclculateMultiplicationAndDivision(operands.front());
     operands.pop();
 
     std::string operation;
@@ -215,9 +217,9 @@ double parse(std::string expression) {
 
         //std::cout << accumulator << " " << operation << " " << operand << "\n";
         if (operation == "add") {
-            accumulator = add(accumulator, calculate(operand));
+            accumulator = add(accumulator, unwrapParentesisAndAclculateMultiplicationAndDivision(operand));
         } else if (operation == "sub") {
-            accumulator = sub(accumulator, calculate(operand));
+            accumulator = sub(accumulator, unwrapParentesisAndAclculateMultiplicationAndDivision(operand));
         }
     }
 
@@ -270,7 +272,7 @@ std::string evaluate(std::string expression) {
     std::string trimmedExpression = trimWhitespace(expression);
     if (verifySymbols(trimmedExpression)) {
         std::string expandedExpression = expandExpression(trimmedExpression);
-        return formatOutput(std::to_string(libcalc::parse(expandedExpression)));
+        return formatOutput(std::to_string(libcalc::calculatePlusAndMinus(expandedExpression)));
     } else {
         return "Invalid expression";
     }
